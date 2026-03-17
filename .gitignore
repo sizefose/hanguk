@@ -19,10 +19,22 @@
 
 # production
 /build
+/deploy/data
+/backups
+/backend/media
+/backend/staticfiles
 
 # misc
 .DS_Store
 *.pem
+*.py[cod]
+*.sqlite3
+
+# python
+.venv/
+venv/
+__pycache__/
+backend/__pycache__/
 
 # debug
 npm-debug.log*

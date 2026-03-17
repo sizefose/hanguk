@@ -1,0 +1,31 @@
+/* Compact two-column checkbox layout for discount targeting */
+.field-categories .related-widget-wrapper,
+.field-countries .related-widget-wrapper {
+  max-height: 220px;
+  overflow: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 10px;
+  background: #fff;
+}
+
+.discount-checkboxes {
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+  column-gap: 18px;
+}
+
+.discount-checkboxes li {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  margin: 0 0 6px 0;
+  list-style: none;
+}
+
+.discount-checkboxes label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.2;
+}

@@ -1,0 +1,16 @@
+.git
+.gitignore
+.next
+node_modules
+backups
+coverage
+*.log
+.DS_Store
+.env
+.env.*
+!/.env.example
+
+# Backend artifacts are not needed in frontend image context
+backend/media
+backend/__pycache__
+

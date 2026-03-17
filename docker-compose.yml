@@ -1,0 +1,13 @@
+services:
+  web:
+    build: .
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - NEXT_PUBLIC_API_BASE=${NEXT_PUBLIC_API_BASE:-http://localhost:8000/api}
+      - INTERNAL_API_BASE=${INTERNAL_API_BASE:-http://backend:8000/api}

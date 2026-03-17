@@ -1,0 +1,25 @@
+<div class="module aligned" style="margin: 12px 0 16px;">
+  <h2>{{ reset_filter_icon_label }}</h2>
+  <div class="form-row">
+    <div>
+      <p style="margin: 0 0 8px;">{{ reset_filter_icon_help }}</p>
+      {% if reset_filter_icon_value %}
+        <p style="margin: 0 0 8px;">
+          Текущее изображение:
+          <a href="{{ reset_filter_icon_value.url }}" target="_blank" rel="noopener">Открыть</a>
+        </p>
+      {% endif %}
+      <form method="post" action="{{ reset_filter_icon_action }}" enctype="multipart/form-data" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        {% csrf_token %}
+        <input type="hidden" name="_set_reset_filter_icon" value="1">
+        <input type="file" name="reset_filter_icon" accept="image/*">
+        <button type="submit" class="button default">
+          {{ reset_filter_icon_submit }}
+        </button>
+        <button type="submit" class="button" name="clear_reset_filter_icon" value="1">
+          Очистить
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
