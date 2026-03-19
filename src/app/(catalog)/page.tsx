@@ -1726,56 +1726,19 @@ export default function CatalogPage({ initialData }: { initialData?: CatalogPage
 
               {isHeroLoading ? (
                 <div className="info-content-col info-content-col-right" aria-hidden="true">
-                  <section className="promo-cards promo-cards-skeleton">
-                    {Array.from({ length: 4 }, (_, index) => (
-                      <div key={`promo-skeleton-${index}`} className="promo-card promo-card-skeleton" />
-                    ))}
-                  </section>
                   <section className="delivery-selector-section delivery-selector-skeleton">
                     <div className="delivery-selector-card">
                       <div className="delivery-address-row delivery-address-row-skeleton" />
                     </div>
                   </section>
+                  <section className="promo-cards promo-cards-skeleton">
+                    {Array.from({ length: 4 }, (_, index) => (
+                      <div key={`promo-skeleton-${index}`} className="promo-card promo-card-skeleton" />
+                    ))}
+                  </section>
                 </div>
               ) : promoCards.length || stores.length ? (
                 <div className="info-content-col info-content-col-right">
-                  {promoCards.length ? (
-                    <section className="promo-cards" aria-label="Подборки">
-                      {promoCards.map((card) => {
-                        const image = resolveMediaUrl(card.image) || "/static/images/placeholder.png";
-                        const isLinkCard = card.scenario === "link" && card.link_url.trim();
-
-                        if (isLinkCard) {
-                          return (
-                            <a
-                              key={`promo-card-${card.id}`}
-                              className="promo-card"
-                              href={card.link_url}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              <img className="promo-card-image" src={image} alt="" />
-                            </a>
-                          );
-                        }
-
-                        return (
-                          <button
-                            key={`promo-card-${card.id}`}
-                            type="button"
-                            className="promo-card promo-card-button"
-                            onClick={() => {
-                              if (!card.products?.length) return;
-                              setPromoProductsModal({ products: card.products });
-                            }}
-                          >
-                            <img className="promo-card-image" src={image} alt="" />
-                          </button>
-                        );
-                      })}
-                    </section>
-                  ) : null}
-
                   {stores.length ? (
                     <section className="delivery-selector-section" aria-label="Доставка по адресу">
                       <div
@@ -1860,6 +1823,43 @@ export default function CatalogPage({ initialData }: { initialData?: CatalogPage
                           </div>
                         ) : null}
                       </div>
+                    </section>
+                  ) : null}
+
+                  {promoCards.length ? (
+                    <section className="promo-cards" aria-label="Подборки">
+                      {promoCards.map((card) => {
+                        const image = resolveMediaUrl(card.image) || "/static/images/placeholder.png";
+                        const isLinkCard = card.scenario === "link" && card.link_url.trim();
+
+                        if (isLinkCard) {
+                          return (
+                            <a
+                              key={`promo-card-${card.id}`}
+                              className="promo-card"
+                              href={card.link_url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <img className="promo-card-image" src={image} alt="" />
+                            </a>
+                          );
+                        }
+
+                        return (
+                          <button
+                            key={`promo-card-${card.id}`}
+                            type="button"
+                            className="promo-card promo-card-button"
+                            onClick={() => {
+                              if (!card.products?.length) return;
+                              setPromoProductsModal({ products: card.products });
+                            }}
+                          >
+                            <img className="promo-card-image" src={image} alt="" />
+                          </button>
+                        );
+                      })}
                     </section>
                   ) : null}
                 </div>
