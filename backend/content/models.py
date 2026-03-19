@@ -20,18 +20,28 @@ class AboutTabSection(models.Model):
         (SECTION_LOCATION, "Расположение"),
     )
 
-    title = models.CharField(max_length=120)
-    slug = models.SlugField(max_length=160, unique=True, blank=True)
-    description = models.TextField(blank=True)
-    image = models.ImageField(upload_to="about/", blank=True)
+    title = models.CharField(max_length=120, verbose_name="Заголовок")
+    slug = models.SlugField(
+        max_length=160,
+        unique=True,
+        blank=True,
+        verbose_name="Slug (служебный идентификатор вкладки)",
+    )
+    description = models.TextField(blank=True, verbose_name="Описание")
+    image = models.ImageField(upload_to="about/", blank=True, verbose_name="Изображение")
     section_type = models.CharField(
         max_length=20,
         choices=SECTION_TYPE_CHOICES,
         default=SECTION_GENERIC,
+        verbose_name="Тип раздела",
     )
-    map_script_url = models.URLField(blank=True, default=DEFAULT_YANDEX_MAP_SCRIPT_URL)
-    sort_order = models.PositiveIntegerField(default=0)
-    is_active = models.BooleanField(default=True)
+    map_script_url = models.URLField(
+        blank=True,
+        default=DEFAULT_YANDEX_MAP_SCRIPT_URL,
+        verbose_name="Скрипт карты",
+    )
+    sort_order = models.PositiveIntegerField(default=0, verbose_name="Позиция")
+    is_active = models.BooleanField(default=True, verbose_name="Активность")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -108,13 +118,13 @@ class ContentBanner(Banner):
 
 
 class HeroSection(models.Model):
-    description = models.TextField(blank=True)
-    image = models.ImageField(upload_to="hero/", blank=True)
+    description = models.TextField(blank=True, verbose_name="Описание")
+    image = models.ImageField(upload_to="hero/", blank=True, verbose_name="Изображение")
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Hero блок"
-        verbose_name_plural = "Hero блок"
+        verbose_name = "Hero"
+        verbose_name_plural = "Hero"
 
     def save(self, *args, **kwargs):
         old_image = None
@@ -138,7 +148,7 @@ class HeroSection(models.Model):
         delete_stored_file(image_storage, image_name)
 
     def __str__(self) -> str:
-        return "Hero блок"
+        return "Hero"
 
 
 class SiteSettings(models.Model):
@@ -273,11 +283,11 @@ class StoreContact(models.Model):
         on_delete=models.CASCADE,
         related_name="store_contacts",
     )
-    name = models.CharField(max_length=120, blank=True, default="Магазин")
-    address = models.CharField(max_length=255)
-    phone = models.CharField(max_length=64, blank=True)
+    name = models.CharField(max_length=120, blank=True, default="Магазин", verbose_name="Имя магазина")
+    address = models.CharField(max_length=255, verbose_name="Адрес")
+    phone = models.CharField(max_length=64, blank=True, verbose_name="Номер телефона")
     sort_order = models.PositiveIntegerField(default=0)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, verbose_name="Активность")
 
     class Meta:
         verbose_name = "Магазин"
@@ -344,17 +354,27 @@ class PromoCard(models.Model):
         (SCENARIO_NEW, "Новинки"),
     )
 
-    image = models.ImageField(upload_to="promo_cards/")
-    scenario = models.CharField(max_length=16, choices=SCENARIO_CHOICES, default=SCENARIO_LINK)
-    link_url = models.URLField(blank=True)
-    products = models.ManyToManyField(Product, blank=True, related_name="promo_cards")
-    sort_order = models.PositiveIntegerField(default=0)
-    is_active = models.BooleanField(default=True)
+    image = models.ImageField(upload_to="promo_cards/", verbose_name="Изображение")
+    scenario = models.CharField(
+        max_length=16,
+        choices=SCENARIO_CHOICES,
+        default=SCENARIO_LINK,
+        verbose_name="Сценарий",
+    )
+    link_url = models.URLField(blank=True, verbose_name="Ссылка для перехода")
+    products = models.ManyToManyField(
+        Product,
+        blank=True,
+        related_name="promo_cards",
+        verbose_name="Товары (Список)",
+    )
+    sort_order = models.PositiveIntegerField(default=0, verbose_name="Позиция карточки")
+    is_active = models.BooleanField(default=True, verbose_name="Активность карточки")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Карточка предложения"
-        verbose_name_plural = "Карточки предложений"
+        verbose_name = "Карточка"
+        verbose_name_plural = "Карточки"
         ordering = ("sort_order", "id")
 
     def __str__(self) -> str:

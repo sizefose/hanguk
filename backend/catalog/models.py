@@ -63,9 +63,9 @@ def delete_stored_file(storage, file_name: str | None):
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=120, unique=True)
-    slug = models.SlugField(max_length=160, unique=True)
-    image = models.ImageField(upload_to="categories/", blank=True)
+    title = models.CharField(max_length=120, unique=True, verbose_name="Название категории")
+    slug = models.SlugField(max_length=160, unique=True, verbose_name="Адрес")
+    image = models.ImageField(upload_to="categories/", blank=True, verbose_name="Иконка")
 
     class Meta:
         verbose_name = "Категория"
@@ -76,9 +76,9 @@ class Category(models.Model):
 
 
 class Country(models.Model):
-    title = models.CharField(max_length=120, unique=True)
-    slug = models.SlugField(max_length=160, unique=True)
-    image = models.ImageField(upload_to="countries/", blank=True)
+    title = models.CharField(max_length=120, unique=True, verbose_name="Название страны")
+    slug = models.SlugField(max_length=160, unique=True, verbose_name="Адрес")
+    image = models.ImageField(upload_to="countries/", blank=True, verbose_name="Иконка")
 
     class Meta:
         verbose_name = "Страна"
@@ -106,19 +106,23 @@ class CatalogFilterSettings(models.Model):
 
 
 class Product(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    country = models.ForeignKey(Country, on_delete=models.PROTECT)
-    title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, unique=True, blank=True)
-    description = models.TextField(blank=True)
-    ingredients = models.TextField(blank=True)
-    preparation = models.TextField(blank=True)
-    serving = models.TextField(blank=True)
-    photo = models.ImageField(upload_to="products/", blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Категория")
+    country = models.ForeignKey(Country, on_delete=models.PROTECT, verbose_name="Страна")
+    title = models.CharField(max_length=255, verbose_name="Название товара")
+    slug = models.SlugField(max_length=255, unique=True, blank=True, verbose_name="Адрес")
+    description = models.TextField(blank=True, verbose_name="Описание")
+    ingredients = models.TextField(blank=True, verbose_name="Состав")
+    preparation = models.TextField(blank=True, verbose_name="Приготовление")
+    serving = models.TextField(blank=True, verbose_name="Подача")
+    photo = models.ImageField(upload_to="products/", blank=True, verbose_name="Фото")
     photo_thumb = models.ImageField(upload_to="products/thumbs/", blank=True, editable=False)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    spicy = models.PositiveSmallIntegerField(default=0, validators=[validate_spicy])
-    is_new = models.BooleanField(default=False)
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
+    spicy = models.PositiveSmallIntegerField(
+        default=0,
+        validators=[validate_spicy],
+        verbose_name="Острота (0-5)",
+    )
+    is_new = models.BooleanField(default=False, verbose_name="Маркер новинки")
     new_marked_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -204,24 +208,44 @@ class DiscountGroup(models.Model):
         (DISCOUNT_FIXED, "Рубли"),
     )
 
-    name = models.CharField(max_length=140, unique=True)
+    name = models.CharField(max_length=140, unique=True, verbose_name="Название группы")
     start_at = models.DateTimeField()
     end_at = models.DateTimeField()
-    is_active = models.BooleanField(default=True)
-    discount_type = models.CharField(max_length=10, choices=DISCOUNT_TYPE_CHOICES)
-    discount_value = models.DecimalField(max_digits=10, decimal_places=2)
+    is_active = models.BooleanField(default=True, verbose_name="Активность группы")
+    discount_type = models.CharField(
+        max_length=10,
+        choices=DISCOUNT_TYPE_CHOICES,
+        verbose_name="Тип скидки (%/₽)",
+    )
+    discount_value = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name="Размер скидки",
+    )
 
-    categories = models.ManyToManyField(Category, blank=True, related_name="discount_groups")
-    countries = models.ManyToManyField(Country, blank=True, related_name="discount_groups")
+    categories = models.ManyToManyField(
+        Category,
+        blank=True,
+        related_name="discount_groups",
+        verbose_name="Категории",
+    )
+    countries = models.ManyToManyField(
+        Country,
+        blank=True,
+        related_name="discount_groups",
+        verbose_name="Страны",
+    )
     manual_products = models.ManyToManyField(
         Product,
         blank=True,
         related_name="manual_discount_groups",
+        verbose_name="Включенные товары",
     )
     excluded_products = models.ManyToManyField(
         Product,
         blank=True,
         related_name="excluded_discount_groups",
+        verbose_name="Исключенные товары",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -264,20 +288,30 @@ class DiscountGroup(models.Model):
 
 
 class Banner(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    image = models.ImageField(upload_to="banners/")
+    title = models.CharField(max_length=255, verbose_name="Заголовок")
+    description = models.TextField(blank=True, verbose_name="Описание")
+    image = models.ImageField(upload_to="banners/", verbose_name="Картинка")
     image_thumb = models.ImageField(upload_to="banners/thumbs/", blank=True, editable=False)
-    sort_order = models.PositiveIntegerField(default=0)
-    background_image = models.ImageField(upload_to="banners/backgrounds/", blank=True)
-    background_color = models.CharField(max_length=20, blank=True, default="#0B6BA7")
+    sort_order = models.PositiveIntegerField(default=0, verbose_name="Позиция в карусели")
+    background_image = models.ImageField(
+        upload_to="banners/backgrounds/",
+        blank=True,
+        verbose_name="Фон баннера",
+    )
+    background_color = models.CharField(
+        max_length=20,
+        blank=True,
+        default="#0B6BA7",
+        verbose_name="Цвет фона",
+    )
     background_opacity = models.PositiveSmallIntegerField(
         default=60,
         validators=[MinValueValidator(0), MaxValueValidator(100)],
         help_text="0-100",
+        verbose_name="Непрозрачность фона",
     )
-    link_url = models.URLField(blank=True)
-    is_active = models.BooleanField(default=True)
+    link_url = models.URLField(blank=True, verbose_name="Ссылка для перехода")
+    is_active = models.BooleanField(default=True, verbose_name="Активность баннера")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

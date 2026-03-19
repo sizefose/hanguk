@@ -336,8 +336,8 @@ class CategoryAdmin(admin.ModelAdmin):
         settings = _load_filter_settings()
         extra_context = {
             **(extra_context or {}),
-            "reset_filter_icon_label": "Иконка сброса фильтров",
-            "reset_filter_icon_help": "Изображение для пункта «Все категории».",
+            "reset_filter_icon_label": "Иконка для пункта «Все категории»",
+            "reset_filter_icon_help": "Иконка для пункта «Все категории».",
             "reset_filter_icon_value": settings.all_categories_image if settings else None,
             "reset_filter_icon_action": request.path,
             "reset_filter_icon_submit": "Сохранить иконку",
@@ -376,8 +376,8 @@ class CountryAdmin(admin.ModelAdmin):
         settings = _load_filter_settings()
         extra_context = {
             **(extra_context or {}),
-            "reset_filter_icon_label": "Иконка сброса фильтров",
-            "reset_filter_icon_help": "Изображение для пункта «Все страны».",
+            "reset_filter_icon_label": "Иконка для пункта «Все страны»",
+            "reset_filter_icon_help": "Иконка для пункта «Все страны».",
             "reset_filter_icon_value": settings.all_countries_image if settings else None,
             "reset_filter_icon_action": request.path,
             "reset_filter_icon_submit": "Сохранить иконку",
