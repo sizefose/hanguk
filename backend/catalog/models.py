@@ -288,9 +288,9 @@ class DiscountGroup(models.Model):
 
 
 class Banner(models.Model):
-    title = models.CharField(max_length=255, verbose_name="Заголовок")
+    title = models.CharField(max_length=255, blank=True, verbose_name="Заголовок")
     description = models.TextField(blank=True, verbose_name="Описание")
-    image = models.ImageField(upload_to="banners/", verbose_name="Картинка")
+    image = models.ImageField(upload_to="banners/", blank=True, verbose_name="Картинка")
     image_thumb = models.ImageField(upload_to="banners/thumbs/", blank=True, editable=False)
     sort_order = models.PositiveIntegerField(default=0, verbose_name="Позиция в карусели")
     background_image = models.ImageField(
@@ -379,4 +379,4 @@ class Banner(models.Model):
         delete_stored_file(background_storage, background_name)
 
     def __str__(self) -> str:
-        return self.title
+        return self.title or f"Баннер #{self.pk or 'new'}"

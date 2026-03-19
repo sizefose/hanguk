@@ -1637,24 +1637,32 @@ export default function CatalogPage({ initialData }: { initialData?: CatalogPage
                             banner.background_color || "#0B6BA7",
                             bannerAlpha
                           );
+                          const bannerTitle = (banner.title || "").trim();
+                          const bannerDescription = (banner.description || "").trim();
+                          const hasBannerText = Boolean(bannerTitle || bannerDescription);
+                          const hasBannerImage = Boolean(bannerImage);
                           const bannerBody = (
                             <>
-                              <div className="banner-content">
-                                <h2 className="banner-title">
-                                  {banner.title}
-                                </h2>
-                                <p className="banner-desc">{banner.description}</p>
-                              </div>
-                              <div
-                                className="banner-media"
-                                role="img"
-                                aria-label={banner.title}
-                                style={{
-                                  backgroundImage: bannerImage
-                                    ? `url(${bannerImage})`
-                                    : "none",
-                                }}
-                              />
+                              {hasBannerText ? (
+                                <div className="banner-content">
+                                  {bannerTitle ? (
+                                    <h2 className="banner-title">{bannerTitle}</h2>
+                                  ) : null}
+                                  {bannerDescription ? (
+                                    <p className="banner-desc">{bannerDescription}</p>
+                                  ) : null}
+                                </div>
+                              ) : null}
+                              {hasBannerImage ? (
+                                <div
+                                  className="banner-media"
+                                  role="img"
+                                  aria-label={bannerTitle || "Баннер"}
+                                  style={{
+                                    backgroundImage: `url(${bannerImage})`,
+                                  }}
+                                />
+                              ) : null}
                             </>
                           );
 
